@@ -69,6 +69,44 @@
       padding: 20px;
       max-width: 500px;
     }
+    .slideshow-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0,0,0,0.5);
+      color: white;
+      border: none;
+      cursor: pointer;
+      padding: 15px;
+      z-index: 10;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+    .slideshow-nav:hover {
+      background-color: rgba(0,0,0,0.8);
+    }
+    .prev {
+      left: 20px;
+    }
+    .next {
+      right: 20px;
+    }
+    @media (max-width: 640px) {
+      .lightbox-close-mobile {
+        display: block !important;
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: rgba(0,0,0,0.7);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        font-size: 24px;
+        z-index: 60;
+      }
+    }
   </style>
 </head>
 <body class="bg-white text-gray-800 font-sans">
@@ -88,39 +126,43 @@
       </div>
     </div>
   </header>
-<!-- Image Slideshow -->
-<div class="slideshow-container">
-  <div class="slide active" style="background-image: url('art6.jpg')">
-    <div class="slide-content">
-      <h2 class="text-2xl font-serif font-bold">Abstract Expressions</h2>
-      <p>Exploring the boundaries of color and form</p>
+
+  <!-- Image Slideshow with Navigation -->
+  <div class="slideshow-container">
+    <button class="slideshow-nav prev" onclick="prevSlide()">❮</button>
+    <button class="slideshow-nav next" onclick="nextSlide()">❯</button>
+    
+    <div class="slide active" style="background-image: url('art6.jpg')">
+      <div class="slide-content">
+        <h2 class="text-2xl font-serif font-bold">Abstract Expressions</h2>
+        <p>Exploring the boundaries of color and form</p>
+      </div>
+    </div>
+    <div class="slide" style="background-image: url('art7.jpg')">
+      <div class="slide-content">
+        <h2 class="text-2xl font-serif font-bold">Urban Landscapes</h2>
+        <p>The city as living canvas</p>
+      </div>
+    </div>
+    <div class="slide" style="background-image: url('art8.jpg')">
+      <div class="slide-content">
+        <h2 class="text-2xl font-serif font-bold">Color Theory</h2>
+        <p>Vibrant explorations of hue and saturation</p>
+      </div>
+    </div>
+    <div class="slide" style="background-image: url('art9.jpg')">
+      <div class="slide-content">
+        <h2 class="text-2xl font-serif font-bold">Textural Dimensions</h2>
+        <p>Art you can almost feel</p>
+      </div>
+    </div>
+    <div class="slide" style="background-image: url('art10.jpg')">
+      <div class="slide-content">
+        <h2 class="text-2xl font-serif font-bold">Minimalist Forms</h2>
+        <p>The power of simplicity</p>
+      </div>
     </div>
   </div>
-  <div class="slide" style="background-image: url('art7.jpg')">
-    <div class="slide-content">
-      <h2 class="text-2xl font-serif font-bold">Urban Landscapes</h2>
-      <p>The city as living canvas</p>
-    </div>
-  </div>
-  <div class="slide" style="background-image: url('art8.jpg')">
-    <div class="slide-content">
-      <h2 class="text-2xl font-serif font-bold">Color Theory</h2>
-      <p>Vibrant explorations of hue and saturation</p>
-    </div>
-  </div>
-  <div class="slide" style="background-image: url('art9.jpg')">
-    <div class="slide-content">
-      <h2 class="text-2xl font-serif font-bold">Textural Dimensions</h2>
-      <p>Art you can almost feel</p>
-    </div>
-  </div>
-  <div class="slide" style="background-image: url('art10.jpg')">
-    <div class="slide-content">
-      <h2 class="text-2xl font-serif font-bold">Minimalist Forms</h2>
-      <p>The power of simplicity</p>
-    </div>
-  </div>
-</div>
 
   <!-- Gallery Section -->
   <section id="gallery" class="py-20 bg-gray-50">
@@ -205,8 +247,9 @@
     </div>
   </footer>
 
-  <!-- Lightbox Modal -->
+  <!-- Lightbox Modal with Mobile Close Button -->
   <div id="lightbox-modal" class="hidden fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
+    <button id="mobile-close-btn" class="lightbox-close-mobile hidden" onclick="closeModal()">×</button>
     <div class="relative max-w-6xl w-full">
       <button onclick="closeModal()" class="absolute -top-12 right-0 text-white text-4xl hover:text-gray-300 transition-colors duration-300 focus:outline-none">
         &times;
@@ -230,6 +273,7 @@
     // Slideshow functionality
     let currentSlide = 0;
     const slides = document.querySelectorAll('.slide');
+    let slideInterval;
     
     function showSlide(n) {
       slides.forEach(slide => slide.classList.remove('active'));
@@ -241,8 +285,22 @@
       showSlide(currentSlide + 1);
     }
     
-    // Change slide every 5 seconds
-    setInterval(nextSlide, 9000);
+    function prevSlide() {
+      showSlide(currentSlide - 1);
+    }
+    
+    // Auto-advance every 5 seconds
+    function startSlideShow() {
+      slideInterval = setInterval(nextSlide, 5000);
+    }
+    
+    // Pause on hover
+    const slideshow = document.querySelector('.slideshow-container');
+    slideshow.addEventListener('mouseenter', () => clearInterval(slideInterval));
+    slideshow.addEventListener('mouseleave', startSlideShow);
+    
+    // Start slideshow
+    startSlideShow();
     
     // Gallery data with artwork details
     const artworks = [
@@ -327,11 +385,13 @@
       document.getElementById('artwork-medium').textContent = artwork.medium;
       document.getElementById('artwork-description').textContent = artwork.description;
       document.getElementById('lightbox-modal').classList.remove('hidden');
+      document.getElementById('mobile-close-btn').classList.remove('hidden');
       document.body.style.overflow = 'hidden';
     }
 
     function closeModal() {
       document.getElementById('lightbox-modal').classList.add('hidden');
+      document.getElementById('mobile-close-btn').classList.add('hidden');
       document.body.style.overflow = 'auto';
     }
 
@@ -350,4 +410,4 @@
     });
   </script>
 </body>
-</html>
+          </html>
