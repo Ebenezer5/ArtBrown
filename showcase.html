@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery | Asare Brown Contemporary Art</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .art-card {
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+    .art-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    .art-image {
+      transition: transform 0.5s ease;
+    }
+    .art-card:hover .art-image {
+      transform: scale(1.03);
+    }
+    .art-info {
+      background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .art-card:hover .art-info {
+      opacity: 1;
+    }
+    .filter-active {
+      background-color: black;
+      color: white;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 font-sans">
+  <!-- Navigation -->
+  <header class="bg-black text-white sticky top-0 z-50 shadow-lg">
+    <div class="container mx-auto px-6 py-4">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <a href="index.html" class="text-3xl font-bold font-serif tracking-tight">Asare Brown</a>
+        <nav class="mt-4 md:mt-0">
+          <ul class="flex space-x-2 md:space-x-8">
+            <li><a href="index.html" class="px-3 py-2 rounded hover:bg-gray-800 transition-colors duration-300">Home</a></li>
+            <li><a href="gallery.html" class="px-3 py-2 rounded bg-gray-800 transition-colors duration-300">Gallery</a></li>
+            <li><a href="index.html#about" class="px-3 py-2 rounded hover:bg-gray-800 transition-colors duration-300">About</a></li>
+            <li><a href="index.html#contact" class="px-3 py-2 rounded hover:bg-gray-800 transition-colors duration-300">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Gallery Hero -->
+  <section class="relative h-96 flex items-center justify-center bg-gray-900 overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <img src="art6.jpg" alt="Gallery Background" class="w-full h-full object-cover opacity-50">
+    </div>
+    <div class="relative z-10 text-center px-4">
+      <h1 class="text-4xl md:text-6xl font-serif font-bold text-white mb-4">Art Collection</h1>
+      <p class="text-xl text-gray-300 max-w-2xl mx-auto">Exploring emotional landscapes through contemporary art</p>
+    </div>
+  </section>
+
+  <!-- Gallery Grid -->
+  <section class="py-16">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Artwork 1 -->
+        <div class="art-card rounded-lg shadow-md relative h-96">
+          <img src="art1.jpg" alt="Vibrant Echoes" class="art-image w-full h-full object-cover">
+          <div class="art-info absolute inset-0 flex items-end p-6 text-white">
+            <div>
+              <h3 class="text-xl font-serif font-bold">Vibrant Echoes</h3>
+              <p>Acrylic on canvas | 30 × 40 in | 2023</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Artwork 2 -->
+        <div class="art-card rounded-lg shadow-md relative h-96">
+          <img src="art2.jpg" alt="Urban Rhythms" class="art-image w-full h-full object-cover">
+          <div class="art-info absolute inset-0 flex items-end p-6 text-white">
+            <div>
+              <h3 class="text-xl font-serif font-bold">Urban Rhythms</h3>
+              <p>Mixed media | 24 × 36 in | 2022</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Artwork 3 -->
+        <div class="art-card rounded-lg shadow-md relative h-96">
+          <img src="art3.jpg" alt="Silent Whispers" class="art-image w-full h-full object-cover">
+          <div class="art-info absolute inset-0 flex items-end p-6 text-white">
+            <div>
+              <h3 class="text-xl font-serif font-bold">Silent Whispers</h3>
+              <p>Oil and gold leaf | 20 × 30 in | 2024</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Artwork 4 -->
+        <div class="art-card rounded-lg shadow-md relative h-96">
+          <img src="art4.jpg" alt="Color Fields" class="art-image w-full h-full object-cover">
+          <div class="art-info absolute inset-0 flex items-end p-6 text-white">
+            <div>
+              <h3 class="text-xl font-serif font-bold">Color Fields</h3>
+              <p>Acrylic on canvas | 36 × 48 in | 2023</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Artwork 5 -->
+        <div class="art-card rounded-lg shadow-md relative h-96">
+          <img src="art5.jpg" alt="Metropolis" class="art-image w-full h-full object-cover">
+          <div class="art-info absolute inset-0 flex items-end p-6 text-white">
+            <div>
+              <h3 class="text-xl font-serif font-bold">Metropolis</h3>
+              <p>Mixed media on wood | 24 × 24 in | 2022</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Artwork 6 -->
+        <div class="art-card rounded-lg shadow-md relative h-96">
+          <img src="art6.jpg" alt="Abstract Expressions" class="art-image w-full h-full object-cover">
+          <div class="art-info absolute inset-0 flex items-end p-6 text-white">
+            <div>
+              <h3 class="text-xl font-serif font-bold">Abstract Expressions</h3>
+              <p>Oil on canvas | 40 × 60 in | 2023</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Artwork 7 -->
+        <div class="art-card rounded-lg shadow-md relative h-96">
+          <img src="art7.jpg" alt="Urban Landscapes" class="art-image w-full h-full object-cover">
+          <div class="art-info absolute inset-0 flex items-end p-6 text-white">
+            <div>
+              <h3 class="text-xl font-serif font-bold">Urban Landscapes</h3>
+              <p>Mixed media | 30 × 40 in | 2023</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Artwork 8 -->
+        <div class="art-card rounded-lg shadow-md relative h-96">
+          <img src="art8.jpg" alt="Color Theory" class="art-image w-full h-full object-cover">
+          <div class="art-info absolute inset-0 flex items-end p-6 text-white">
+            <div>
+              <h3 class="text-xl font-serif font-bold">Color Theory</h3>
+              <p>Acrylic on canvas | 36 × 48 in | 2024</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Artwork 9 -->
+        <div class="art-card rounded-lg shadow-md relative h-96">
+          <img src="art9.jpg" alt="Textural Dimensions" class="art-image w-full h-full object-cover">
+          <div class="art-info absolute inset-0 flex items-end p-6 text-white">
+            <div>
+              <h3 class="text-xl font-serif font-bold">Textural Dimensions</h3>
+              <p>Mixed media | 24 × 36 in | 2023</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-gray-400 py-12">
+    <div class="container mx-auto px-4 text-center">
+      <h3 class="text-white text-xl font-serif font-bold mb-4">Asare Brown</h3>
+      <p class="max-w-2xl mx-auto mb-6">Contemporary art that challenges perspectives and inspires emotional well-being.</p>
+      <p>&copy; 2025 Asare Brown. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Simple hover effect enhancement
+    document.querySelectorAll('.art-card').forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        card.querySelector('.art-info').style.opacity = '1';
+      });
+      card.addEventListener('mouseleave', () => {
+        card.querySelector('.art-info').style.opacity = '0';
+      });
+    });
+  </script>
+</body>
+</html>
