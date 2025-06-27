@@ -3,37 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gallery | Asare Brown Contemporary Art</title>
+  <meta name="description" content="Explore Asare Brown's complete contemporary art collection - vibrant abstract expressions exploring emotional landscapes">
+  <title>Full Gallery | Asare Brown Contemporary Art</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     .art-card {
       transition: all 0.3s ease;
       overflow: hidden;
+      position: relative;
     }
     .art-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
     }
     .art-image {
       transition: transform 0.5s ease;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
     .art-card:hover .art-image {
-      transform: scale(1.03);
+      transform: scale(1.05);
     }
     .art-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
       background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+      padding: 1.5rem;
+      color: white;
       opacity: 0;
       transition: opacity 0.3s ease;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
     }
     .art-card:hover .art-info {
       opacity: 1;
+      transform: translateY(0);
     }
-    .filter-active {
-      background-color: black;
-      color: white;
+    .loading-spinner {
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
   </style>
 </head>
@@ -43,14 +61,25 @@
     <div class="container mx-auto px-6 py-4">
       <div class="flex flex-col md:flex-row justify-between items-center">
         <a href="index.html" class="text-3xl font-bold font-serif tracking-tight">Asare Brown</a>
-        <nav class="mt-4 md:mt-0">
+        <button class="md:hidden text-2xl focus:outline-none" id="mobile-menu-button">
+          <i class="fas fa-bars"></i>
+        </button>
+        <nav class="hidden md:block mt-4 md:mt-0" id="desktop-menu">
           <ul class="flex space-x-2 md:space-x-8">
             <li><a href="index.html" class="px-3 py-2 rounded hover:bg-gray-800 transition-colors duration-300">Home</a></li>
-            <li><a href="gallery.html" class="px-3 py-2 rounded bg-gray-800 transition-colors duration-300">Gallery</a></li>
+            <li><a href="#" class="px-3 py-2 rounded bg-gray-800 transition-colors duration-300">Gallery</a></li>
             <li><a href="index.html#about" class="px-3 py-2 rounded hover:bg-gray-800 transition-colors duration-300">About</a></li>
             <li><a href="index.html#contact" class="px-3 py-2 rounded hover:bg-gray-800 transition-colors duration-300">Contact</a></li>
           </ul>
         </nav>
+        <div class="mobile-menu md:hidden hidden" id="mobile-menu">
+          <ul class="flex flex-col space-y-2">
+            <li><a href="index.html" class="block px-3 py-2 rounded hover:bg-gray-800 transition-colors duration-300">Home</a></li>
+            <li><a href="#" class="block px-3 py-2 rounded bg-gray-800 transition-colors duration-300">Gallery</a></li>
+            <li><a href="index.html#about" class="block px-3 py-2 rounded hover:bg-gray-800 transition-colors duration-300">About</a></li>
+            <li><a href="index.html#contact" class="block px-3 py-2 rounded hover:bg-gray-800 transition-colors duration-300">Contact</a></li>
+          </ul>
+        </div>
       </div>
     </div>
   </header>
@@ -58,115 +87,22 @@
   <!-- Gallery Hero -->
   <section class="relative h-96 flex items-center justify-center bg-gray-900 overflow-hidden">
     <div class="absolute inset-0 z-0">
-      <img src="art6.jpg" alt="Gallery Background" class="w-full h-full object-cover opacity-50">
+      <img src="art6.jpg" alt="Gallery Background" class="w-full h-full object-cover opacity-50" loading="lazy">
     </div>
     <div class="relative z-10 text-center px-4">
-      <h1 class="text-4xl md:text-6xl font-serif font-bold text-white mb-4">Art Collection</h1>
-      <p class="text-xl text-gray-300 max-w-2xl mx-auto">Exploring emotional landscapes through contemporary art</p>
+      <h1 class="text-4xl md:text-6xl font-serif font-bold text-white mb-4">Complete Collection</h1>
+      <p class="text-xl text-gray-300 max-w-2xl mx-auto">A comprehensive view of my contemporary artworks exploring emotional landscapes</p>
     </div>
   </section>
 
   <!-- Gallery Grid -->
   <section class="py-16">
     <div class="container mx-auto px-4">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        <!-- Artwork 1 -->
-        <div class="art-card rounded-lg shadow-md relative h-96">
-          <img src="art1.jpg" alt="Vibrant Echoes" class="art-image w-full h-full object-cover">
-          <div class="art-info absolute inset-0 flex items-end p-6 text-white">
-            <div>
-              <h3 class="text-xl font-serif font-bold">Vibrant Echoes</h3>
-              <p>Acrylic on canvas | 30 × 40 in | 2023</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Artwork 2 -->
-        <div class="art-card rounded-lg shadow-md relative h-96">
-          <img src="art2.jpg" alt="Urban Rhythms" class="art-image w-full h-full object-cover">
-          <div class="art-info absolute inset-0 flex items-end p-6 text-white">
-            <div>
-              <h3 class="text-xl font-serif font-bold">Urban Rhythms</h3>
-              <p>Mixed media | 24 × 36 in | 2022</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Artwork 3 -->
-        <div class="art-card rounded-lg shadow-md relative h-96">
-          <img src="art3.jpg" alt="Silent Whispers" class="art-image w-full h-full object-cover">
-          <div class="art-info absolute inset-0 flex items-end p-6 text-white">
-            <div>
-              <h3 class="text-xl font-serif font-bold">Silent Whispers</h3>
-              <p>Oil and gold leaf | 20 × 30 in | 2024</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Artwork 4 -->
-        <div class="art-card rounded-lg shadow-md relative h-96">
-          <img src="art4.jpg" alt="Color Fields" class="art-image w-full h-full object-cover">
-          <div class="art-info absolute inset-0 flex items-end p-6 text-white">
-            <div>
-              <h3 class="text-xl font-serif font-bold">Color Fields</h3>
-              <p>Acrylic on canvas | 36 × 48 in | 2023</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Artwork 5 -->
-        <div class="art-card rounded-lg shadow-md relative h-96">
-          <img src="art5.jpg" alt="Metropolis" class="art-image w-full h-full object-cover">
-          <div class="art-info absolute inset-0 flex items-end p-6 text-white">
-            <div>
-              <h3 class="text-xl font-serif font-bold">Metropolis</h3>
-              <p>Mixed media on wood | 24 × 24 in | 2022</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Artwork 6 -->
-        <div class="art-card rounded-lg shadow-md relative h-96">
-          <img src="art6.jpg" alt="Abstract Expressions" class="art-image w-full h-full object-cover">
-          <div class="art-info absolute inset-0 flex items-end p-6 text-white">
-            <div>
-              <h3 class="text-xl font-serif font-bold">Abstract Expressions</h3>
-              <p>Oil on canvas | 40 × 60 in | 2023</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Artwork 7 -->
-        <div class="art-card rounded-lg shadow-md relative h-96">
-          <img src="art7.jpg" alt="Urban Landscapes" class="art-image w-full h-full object-cover">
-          <div class="art-info absolute inset-0 flex items-end p-6 text-white">
-            <div>
-              <h3 class="text-xl font-serif font-bold">Urban Landscapes</h3>
-              <p>Mixed media | 30 × 40 in | 2023</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Artwork 8 -->
-        <div class="art-card rounded-lg shadow-md relative h-96">
-          <img src="art8.jpg" alt="Color Theory" class="art-image w-full h-full object-cover">
-          <div class="art-info absolute inset-0 flex items-end p-6 text-white">
-            <div>
-              <h3 class="text-xl font-serif font-bold">Color Theory</h3>
-              <p>Acrylic on canvas | 36 × 48 in | 2024</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Artwork 9 -->
-        <div class="art-card rounded-lg shadow-md relative h-96">
-          <img src="art9.jpg" alt="Textural Dimensions" class="art-image w-full h-full object-cover">
-          <div class="art-info absolute inset-0 flex items-end p-6 text-white">
-            <div>
-              <h3 class="text-xl font-serif font-bold">Textural Dimensions</h3>
-              <p>Mixed media | 24 × 36 in | 2023</p>
-            </div>
-          </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" id="gallery-grid">
+        <!-- Loading state -->
+        <div class="text-center py-16 col-span-full">
+          <div class="inline-block loading-spinner border-4 border-gray-300 border-t-black rounded-full w-12 h-12"></div>
+          <p class="mt-4 text-gray-500">Loading artworks...</p>
         </div>
       </div>
     </div>
@@ -181,15 +117,140 @@
     </div>
   </footer>
 
+  <!-- Lightbox Modal -->
+  <div id="lightbox-modal" class="hidden fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
+    <button onclick="closeModal()" class="absolute top-4 right-4 text-white text-4xl hover:text-gray-300 transition-colors duration-300 focus:outline-none">
+      <i class="fas fa-times"></i>
+    </button>
+    <div class="relative max-w-4xl w-full">
+      <div class="bg-white rounded-lg overflow-hidden">
+        <img id="lightbox-image" class="w-full max-h-[80vh] object-contain" src="" alt="" loading="lazy">
+        <div class="p-6">
+          <h3 id="artwork-title" class="text-xl font-serif font-bold mb-2"></h3>
+          <p id="artwork-medium" class="text-gray-700"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // Simple hover effect enhancement
-    document.querySelectorAll('.art-card').forEach(card => {
-      card.addEventListener('mouseenter', () => {
-        card.querySelector('.art-info').style.opacity = '1';
-      });
-      card.addEventListener('mouseleave', () => {
-        card.querySelector('.art-info').style.opacity = '0';
-      });
+    // Mobile menu toggle
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    mobileMenuButton.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Artwork data
+    const artworks = [
+      {
+        title: "Vibrant Echoes",
+        medium: "Acrylic on canvas | 30 × 40 in | 2023",
+        image: "art1.jpg",
+        description: "An exploration of color resonance in urban environments"
+      },
+      {
+        title: "Urban Rhythms",
+        medium: "Mixed media | 24 × 36 in | 2022",
+        image: "art2.jpg",
+        description: "The pulse of city life captured in abstract forms"
+      },
+      {
+        title: "Silent Whispers",
+        medium: "Oil and gold leaf | 20 × 30 in | 2024",
+        image: "art3.jpg",
+        description: "Delicate expressions of internal dialogues"
+      },
+      {
+        title: "Color Fields",
+        medium: "Acrylic on canvas | 36 × 48 in | 2023",
+        image: "art4.jpg",
+        description: "Bold explorations of chromatic relationships"
+      },
+      {
+        title: "Metropolis",
+        medium: "Mixed media on wood | 24 × 24 in | 2022",
+        image: "art5.jpg",
+        description: "Architectural abstractions of urban landscapes"
+      },
+      {
+        title: "Abstract Expressions",
+        medium: "Oil on canvas | 40 × 60 in | 2023",
+        image: "art6.jpg",
+        description: "Emotional states rendered through gestural marks"
+      },
+      {
+        title: "Urban Landscapes",
+        medium: "Mixed media | 30 × 40 in | 2023",
+        image: "art7.jpg",
+        description: "The energy of cityscapes distilled into form"
+      },
+      {
+        title: "Color Theory",
+        medium: "Acrylic on canvas | 36 × 48 in | 2024",
+        image: "art8.jpg",
+        description: "Studies in chromatic harmony and dissonance"
+      },
+      {
+        title: "Textural Dimensions",
+        medium: "Mixed media | 24 × 36 in | 2023",
+        image: "art9.jpg",
+        description: "Tactile surfaces inviting physical engagement"
+      }
+    ];
+
+    // Load artworks
+    document.addEventListener('DOMContentLoaded', function() {
+      const gallery = document.getElementById('gallery-grid');
+      
+      // Simulate loading delay
+      setTimeout(() => {
+        gallery.innerHTML = '';
+        
+        artworks.forEach(artwork => {
+          const card = document.createElement('div');
+          card.className = 'art-card rounded-lg shadow-md h-96';
+          card.innerHTML = `
+            <img src="${artwork.image}" alt="${artwork.title}" class="art-image" loading="lazy">
+            <div class="art-info">
+              <h3 class="text-xl font-serif font-bold">${artwork.title}</h3>
+              <p>${artwork.medium}</p>
+            </div>
+          `;
+          card.addEventListener('click', () => openModal(artwork));
+          gallery.appendChild(card);
+        });
+      }, 1000);
+    });
+
+    function openModal(artwork) {
+      document.getElementById('lightbox-image').src = artwork.image;
+      document.getElementById('lightbox-image').alt = artwork.title;
+      document.getElementById('artwork-title').textContent = artwork.title;
+      document.getElementById('artwork-medium').textContent = artwork.medium;
+      
+      document.getElementById('lightbox-modal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('lightbox-modal').classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('lightbox-modal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeModal();
+      }
+    });
+
+    // Close modal with ESC key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && !document.getElementById('lightbox-modal').classList.contains('hidden')) {
+        closeModal();
+      }
     });
   </script>
 </body>
