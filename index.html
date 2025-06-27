@@ -3,11 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="ArtBrown - Contemporary art portfolio showcasing vibrant expression and artistic depth">
-  <title>Asare Brown | Contemporary Artist Portfolio</title>
+  <meta name="description" content="Asare Brown - Contemporary artist exploring mental health through vibrant abstract expressions">
+  <meta name="keywords" content="contemporary art, abstract art, mental health art, Asare Brown, modern artist">
+  <title>Asare Brown | Contemporary Abstract Artist</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -20,6 +22,7 @@
           animation: {
             'fade-in': 'fadeIn 1s ease-in-out',
             'slide-up': 'slideUp 0.8s ease-out',
+            'pulse-slow': 'pulse 3s ease-in-out infinite'
           },
           keyframes: {
             fadeIn: {
@@ -46,14 +49,15 @@
       position: relative;
       max-width: 100%;
       overflow: hidden;
-      height: 500px;
+      height: 80vh;
+      min-height: 500px;
     }
     .slide {
       position: absolute;
       width: 100%;
       height: 100%;
       opacity: 0;
-      transition: opacity 1s ease-in-out;
+      transition: opacity 1.5s ease-in-out;
       background-size: cover;
       background-position: center;
     }
@@ -64,10 +68,13 @@
       position: absolute;
       bottom: 40px;
       left: 40px;
+      right: 40px;
       color: white;
       background-color: rgba(0,0,0,0.7);
       padding: 20px;
-      max-width: 500px;
+      max-width: 600px;
+      backdrop-filter: blur(5px);
+      border-radius: 8px;
     }
     .slideshow-nav {
       position: absolute;
@@ -81,17 +88,71 @@
       z-index: 10;
       border-radius: 50%;
       transition: all 0.3s ease;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .slideshow-nav:hover {
       background-color: rgba(0,0,0,0.8);
+      transform: translateY(-50%) scale(1.1);
     }
     .prev {
-      left: 20px;
+      left: 30px;
     }
     .next {
-      right: 20px;
+      right: 30px;
+    }
+    .slide-indicators {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 10;
+    }
+    .slide-indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: rgba(255,255,255,0.5);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .slide-indicator.active {
+      background-color: white;
+      transform: scale(1.2);
+    }
+    @media (max-width: 768px) {
+      .slideshow-container {
+        height: 60vh;
+      }
+      .slide-content {
+        left: 20px;
+        right: 20px;
+        bottom: 20px;
+      }
+      .slideshow-nav {
+        width: 40px;
+        height: 40px;
+        padding: 10px;
+      }
     }
     @media (max-width: 640px) {
+      .mobile-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: black;
+        padding: 1rem;
+      }
+      .mobile-menu.active {
+        display: block;
+      }
       .lightbox-close-mobile {
         display: block !important;
         position: fixed;
@@ -107,6 +168,20 @@
         z-index: 60;
       }
     }
+    .artwork-card {
+      transition: all 0.3s ease;
+    }
+    .artwork-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    .loading-spinner {
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body class="bg-white text-gray-800 font-sans">
@@ -115,7 +190,10 @@
     <div class="container mx-auto px-6 py-4">
       <div class="flex flex-col md:flex-row justify-between items-center">
         <h1 class="text-3xl font-bold font-serif tracking-tight">Asare Brown</h1>
-        <nav class="mt-4 md:mt-0">
+        <button class="md:hidden text-2xl focus:outline-none" id="mobile-menu-button">
+          <i class="fas fa-bars"></i>
+        </button>
+        <nav class="hidden md:block mt-4 md:mt-0" id="desktop-menu">
           <ul class="flex space-x-2 md:space-x-8">
             <li><a href="#home" class="px-3 py-2 rounded hover:bg-gray-800 transition-colors duration-300">Home</a></li>
             <li><a href="#gallery" class="px-3 py-2 rounded hover:bg-gray-800 transition-colors duration-300">Gallery</a></li>
@@ -123,44 +201,64 @@
             <li><a href="#contact" class="px-3 py-2 rounded hover:bg-gray-800 transition-colors duration-300">Contact</a></li>
           </ul>
         </nav>
+        <div class="mobile-menu md:hidden" id="mobile-menu">
+          <ul class="flex flex-col space-y-2">
+            <li><a href="#home" class="block px-3 py-2 rounded hover:bg-gray-800 transition-colors duration-300">Home</a></li>
+            <li><a href="#gallery" class="block px-3 py-2 rounded hover:bg-gray-800 transition-colors duration-300">Gallery</a></li>
+            <li><a href="#about" class="block px-3 py-2 rounded hover:bg-gray-800 transition-colors duration-300">About</a></li>
+            <li><a href="#contact" class="block px-3 py-2 rounded hover:bg-gray-800 transition-colors duration-300">Contact</a></li>
+          </ul>
+        </div>
       </div>
     </div>
   </header>
 
   <!-- Image Slideshow with Navigation -->
-  <div class="slideshow-container">
-    <button class="slideshow-nav prev" onclick="prevSlide()">❮</button>
-    <button class="slideshow-nav next" onclick="nextSlide()">❯</button>
+  <div class="slideshow-container" id="home">
+    <button class="slideshow-nav prev" onclick="prevSlide()" aria-label="Previous slide">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <button class="slideshow-nav next" onclick="nextSlide()" aria-label="Next slide">
+      <i class="fas fa-chevron-right"></i>
+    </button>
     
     <div class="slide active" style="background-image: url('art6.jpg')">
       <div class="slide-content">
-        <h2 class="text-2xl font-serif font-bold">Abstract Expressions</h2>
-        <p>Exploring the boundaries of color and form</p>
+        <h2 class="text-2xl md:text-3xl font-serif font-bold">Abstract Expressions</h2>
+        <p class="mt-2">Exploring the boundaries of color and form</p>
       </div>
     </div>
     <div class="slide" style="background-image: url('art7.jpg')">
       <div class="slide-content">
-        <h2 class="text-2xl font-serif font-bold">Inner Emotions</h2>
-        <p>The city as living canvas</p>
+        <h2 class="text-2xl md:text-3xl font-serif font-bold">Inner Emotions</h2>
+        <p class="mt-2">The city as living canvas</p>
       </div>
     </div>
     <div class="slide" style="background-image: url('art8.jpg')">
       <div class="slide-content">
-        <h2 class="text-2xl font-serif font-bold">Color Theory</h2>
-        <p>Vibrant explorations of hue and saturation</p>
+        <h2 class="text-2xl md:text-3xl font-serif font-bold">Color Theory</h2>
+        <p class="mt-2">Vibrant explorations of hue and saturation</p>
       </div>
     </div>
     <div class="slide" style="background-image: url('art9.jpg')">
       <div class="slide-content">
-        <h2 class="text-2xl font-serif font-bold">Textural Dimensions</h2>
-        <p>Art you can almost feel</p>
+        <h2 class="text-2xl md:text-3xl font-serif font-bold">Textural Dimensions</h2>
+        <p class="mt-2">Art you can almost feel</p>
       </div>
     </div>
     <div class="slide" style="background-image: url('art10.jpg')">
       <div class="slide-content">
-        <h2 class="text-2xl font-serif font-bold">Minimalist Forms</h2>
-        <p>The power of simplicity</p>
+        <h2 class="text-2xl md:text-3xl font-serif font-bold">Minimalist Forms</h2>
+        <p class="mt-2">The power of simplicity</p>
       </div>
+    </div>
+    
+    <div class="slide-indicators">
+      <div class="slide-indicator active" onclick="goToSlide(0)"></div>
+      <div class="slide-indicator" onclick="goToSlide(1)"></div>
+      <div class="slide-indicator" onclick="goToSlide(2)"></div>
+      <div class="slide-indicator" onclick="goToSlide(3)"></div>
+      <div class="slide-indicator" onclick="goToSlide(4)"></div>
     </div>
   </div>
 
@@ -173,14 +271,19 @@
         <p class="mt-6 max-w-2xl mx-auto text-gray-600">Explore my collection of contemporary artworks</p>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8" id="gallery-grid">
         <!-- Gallery items will be loaded here -->
+        <div class="text-center py-8 col-span-full">
+          <div class="inline-block loading-spinner border-4 border-gray-300 border-t-black rounded-full w-12 h-12"></div>
+          <p class="mt-4 text-gray-500">Loading artworks...</p>
+        </div>
       </div>
 
       <!-- View More Button -->
       <div class="text-center mt-12 animate-slide-up">
-        <a href="showcase.html" class="inline-block px-6 py-3 bg-black text-white rounded-full hover:bg-gray-800 transition-colors duration-300 font-medium">
-          View More
+        <a href="showcase.html" class="inline-flex items-center px-8 py-3 bg-black text-white rounded-full hover:bg-gray-800 transition-colors duration-300 font-medium">
+          View Full Gallery
+          <i class="fas fa-arrow-right ml-2"></i>
         </a>
       </div>
     </div>
@@ -191,7 +294,7 @@
     <div class="container mx-auto px-4">
       <div class="flex flex-col md:flex-row items-center">
         <div class="md:w-1/2 mb-10 md:mb-0 md:pr-10 animate-slide-up">
-          <img src="artist.jpg" alt="Asare Brown the artist" class="rounded-lg shadow-xl w-full max-w-md mx-auto">
+          <img src="artist.jpg" alt="Asare Brown the artist in his studio" class="rounded-lg shadow-xl w-full max-w-md mx-auto">
         </div>
         <div class="md:w-1/2 animate-slide-up">
           <h2 class="text-3xl font-serif font-bold mb-6">About Asare Brown</h2>
@@ -221,26 +324,39 @@
       </div>
       
       <div class="max-w-2xl mx-auto">
-        <form class="space-y-6">
+        <form id="contact-form" class="space-y-6">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label for="name" class="block mb-2">Name</label>
-              <input type="text" id="name" class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-white">
+              <label for="name" class="block mb-2">Name *</label>
+              <input type="text" id="name" name="name" required class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-white">
+              <p class="text-red-400 text-sm mt-1 hidden" id="name-error">Please enter your name</p>
             </div>
             <div>
-              <label for="email" class="block mb-2">Email</label>
-              <input type="email" id="email" class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-white">
+              <label for="email" class="block mb-2">Email *</label>
+              <input type="email" id="email" name="email" required class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-white">
+              <p class="text-red-400 text-sm mt-1 hidden" id="email-error">Please enter a valid email</p>
             </div>
           </div>
           <div>
             <label for="subject" class="block mb-2">Subject</label>
-            <input type="text" id="subject" class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-white">
+            <input type="text" id="subject" name="subject" class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-white">
           </div>
           <div>
-            <label for="message" class="block mb-2">Message</label>
-            <textarea id="message" rows="5" class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-white"></textarea>
+            <label for="message" class="block mb-2">Message *</label>
+            <textarea id="message" name="message" rows="5" required class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-white"></textarea>
+            <p class="text-red-400 text-sm mt-1 hidden" id="message-error">Please enter your message</p>
           </div>
-          <button type="submit" class="bg-white text-black px-8 py-3 rounded-full hover:bg-gray-200 transition-colors duration-300 font-medium">Send Message</button>
+          <button type="submit" class="bg-white text-black px-8 py-3 rounded-full hover:bg-gray-200 transition-colors duration-300 font-medium flex items-center justify-center">
+            <span id="submit-text">Send Message</span>
+            <i class="fas fa-paper-plane ml-2"></i>
+            <i class="fas fa-spinner fa-spin ml-2 hidden" id="spinner"></i>
+          </button>
+          <div id="form-success" class="hidden p-4 bg-green-100 text-green-800 rounded-lg mt-4">
+            Thank you! Your message has been sent successfully.
+          </div>
+          <div id="form-error" class="hidden p-4 bg-red-100 text-red-800 rounded-lg mt-4">
+            There was an error sending your message. Please try again later.
+          </div>
         </form>
       </div>
     </div>
@@ -251,22 +367,24 @@
     <div class="container mx-auto px-4 text-center">
       <h3 class="text-white text-xl font-serif font-bold mb-4">Asare Brown</h3>
       <p class="max-w-2xl mx-auto mb-6">Contemporary art that challenges perspectives and inspires emotion.</p>
-      <p>&copy; 2025 ArtBrown. All rights reserved.</p>
+      <p>&copy; 2025 Asare Brown. All rights reserved.</p>
     </div>
   </footer>
 
   <!-- Lightbox Modal with Mobile Close Button -->
-  <div id="lightbox-modal" class="hidden fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
-    <button id="mobile-close-btn" class="lightbox-close-mobile hidden" onclick="closeModal()">×</button>
+  <div id="lightbox-modal" class="hidden fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4" aria-modal="true" role="dialog">
+    <button id="mobile-close-btn" class="lightbox-close-mobile hidden" onclick="closeModal()" aria-label="Close lightbox">
+      <i class="fas fa-times"></i>
+    </button>
     <div class="relative max-w-6xl w-full">
-      <button onclick="closeModal()" class="absolute -top-12 right-0 text-white text-4xl hover:text-gray-300 transition-colors duration-300 focus:outline-none">
-        &times;
+      <button onclick="closeModal()" class="absolute -top-12 right-0 text-white text-4xl hover:text-gray-300 transition-colors duration-300 focus:outline-none" aria-label="Close lightbox">
+        <i class="fas fa-times"></i>
       </button>
-      <div class="flex flex-col md:flex-row bg-white rounded-lg overflow-hidden">
+      <div class="flex flex-col md:flex-row bg-white rounded-lg overflow-hidden max-h-[90vh]">
         <div class="md:w-2/3">
-          <img id="lightbox-image" class="w-full h-auto max-h-[80vh] object-contain" src="" alt="Artwork">
+          <img id="lightbox-image" class="w-full h-full max-h-[80vh] object-contain" src="" alt="" loading="lazy">
         </div>
-        <div class="md:w-1/3 p-6 bg-gray-50">
+        <div class="md:w-1/3 p-6 bg-gray-50 overflow-y-auto">
           <h3 id="artwork-title" class="text-xl font-serif font-bold mb-2">Artwork Title</h3>
           <p id="artwork-year" class="text-gray-600 mb-4">2023</p>
           <p id="artwork-medium" class="text-gray-700 mb-4">Oil on canvas, 24 × 36 in</p>
@@ -277,15 +395,34 @@
   </div>
 
   <script>
+    // Mobile menu toggle
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    mobileMenuButton.addEventListener('click', () => {
+      mobileMenu.classList.toggle('active');
+    });
+
+    // Close mobile menu when clicking on a link
+    document.querySelectorAll('#mobile-menu a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('active');
+      });
+    });
+
     // Slideshow functionality
     let currentSlide = 0;
     const slides = document.querySelectorAll('.slide');
+    const indicators = document.querySelectorAll('.slide-indicator');
     let slideInterval;
     
     function showSlide(n) {
       slides.forEach(slide => slide.classList.remove('active'));
+      indicators.forEach(indicator => indicator.classList.remove('active'));
+      
       currentSlide = (n + slides.length) % slides.length;
       slides[currentSlide].classList.add('active');
+      indicators[currentSlide].classList.add('active');
     }
     
     function nextSlide() {
@@ -294,6 +431,10 @@
     
     function prevSlide() {
       showSlide(currentSlide - 1);
+    }
+    
+    function goToSlide(n) {
+      showSlide(n);
     }
     
     // Auto-advance every 5 seconds
@@ -308,97 +449,191 @@
     
     // Start slideshow
     startSlideShow();
-    
+
     // Gallery data with artwork details
     const artworks = [
       {
         id: 1,
         title: "Laughter",
         year: "2023",
-        medium: "Acrylic on canvas, 17×20 inch  in",
-        description: "In my painting i try to convey the message of a woman who lives a happy life which is a sign of healthy living, hygiene, friendship and contentment in her mind.",
+        medium: "Acrylic on canvas, 17×20 in",
+        description: "In my painting I try to convey the message of a woman who lives a happy life which is a sign of healthy living, hygiene, friendship and contentment in her mind.",
         image: "art1.jpg"
       },
       {
         id: 2,
-        title: "Blurriness of life",
+        title: "Blurriness of Life",
         year: "2022",
-        medium: "Acrylic on paper, 22×25 inch in",
-        description: "The eye , face and from the neck to the chest is portraying the stress , anxiety and depression he is going through in life as a man . The bold green background represent the vegetation where most men end their living through stress and resilience.",
+        medium: "Acrylic on paper, 22×25 in",
+        description: "The eye, face and from the neck to the chest is portraying the stress, anxiety and depression he is going through in life as a man. The bold green background represents the vegetation where most men end their living through stress and resilience.",
         image: "art13.jpg"
       },
       {
         id: 3,
-        title: " Vessel Of Honor ",
+        title: "Vessel Of Honor",
         year: "2024",
-        medium: "Oil pastel on paper, A3 in",
+        medium: "Oil pastel on paper, A3",
+        description: "An exploration of spiritual vessels and sacred containers in our contemporary world.",
         image: "art3.jpg"
       },
       {
         id: 4,
-        title: "Happiness can be purchased",
+        title: "Happiness Can Be Purchased",
         year: "2023",
-        medium: "charcoal on paper, A3 in",
-        description: ".",
+        medium: "Charcoal on paper, A3",
+        description: "A commentary on consumerism and emotional fulfillment in modern society.",
         image: "art4.jpg"
       },
       {
         id: 5,
-        title: "Melody in the heart",
+        title: "Melody in the Heart",
         year: "2022",
-        medium: "Acrylic on canvas, 24 × 24 in",
-        description: "I see my work as a way to bring a piece of music into the natural world and to encourage others to think about music and it's impact on humans. .",
+        medium: "Acrylic on canvas, 24×24 in",
+        description: "I see my work as a way to bring a piece of music into the natural world and to encourage others to think about music and its impact on humans.",
         image: "art5.jpg"
+      },
+      {
+        id: 6,
+        title: "Urban Echoes",
+        year: "2023",
+        medium: "Mixed media on canvas, 30×40 in",
+        description: "The sounds and rhythms of city life translated into visual form.",
+        image: "art6.jpg"
+      },
+      {
+        id: 7,
+        title: "Silent Scream",
+        year: "2022",
+        medium: "Oil on canvas, 36×48 in",
+        description: "Exploring the internal struggles that often go unseen in our daily lives.",
+        image: "art7.jpg"
+      },
+      {
+        id: 8,
+        title: "Fragmented Identity",
+        year: "2024",
+        medium: "Acrylic and collage, 24×36 in",
+        description: "A study of how modern life fragments our sense of self and belonging.",
+        image: "art8.jpg"
       }
     ];
 
     // Initialize gallery
     document.addEventListener('DOMContentLoaded', function() {
-      const gallery = document.querySelector('#gallery .grid');
+      const gallery = document.querySelector('#gallery-grid');
       
-      // Load artworks
-      artworks.forEach(artwork => {
-        const item = document.createElement('div');
-        item.className = 'group relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300';
-        item.innerHTML = `
-          <img src="${artwork.image}" alt="${artwork.title}" class="w-full h-64 object-cover cursor-pointer transform group-hover:scale-105 transition-transform duration-500">
-          <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-            <div class="text-white text-center p-4">
-              <h3 class="font-bold text-lg">${artwork.title}</h3>
-              <p>${artwork.year}</p>
+      // Simulate loading delay
+      setTimeout(() => {
+        gallery.innerHTML = '';
+        
+        // Load artworks
+        artworks.slice(0, 8).forEach(artwork => {
+          const item = document.createElement('div');
+          item.className = 'artwork-card group relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300';
+          item.innerHTML = `
+            <img src="${artwork.image}" alt="${artwork.title}" class="w-full h-64 object-cover cursor-pointer transform group-hover:scale-105 transition-transform duration-500" loading="lazy">
+            <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+              <div class="text-white text-center p-4">
+                <h3 class="font-bold text-lg">${artwork.title}</h3>
+                <p>${artwork.year}</p>
+              </div>
             </div>
-          </div>
-        `;
-        item.addEventListener('click', () => openModal(artwork));
-        gallery.appendChild(item);
-      });
+          `;
+          item.addEventListener('click', () => openModal(artwork));
+          gallery.appendChild(item);
+        });
+      }, 1000);
       
       // Smooth scrolling for anchor links
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
           e.preventDefault();
-          document.querySelector(this.getAttribute('href')).scrollIntoView({
-            behavior: 'smooth'
-          });
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth'
+            });
+          }
         });
       });
+      
+      // Form validation
+      const contactForm = document.getElementById('contact-form');
+      if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          // Reset errors
+          document.querySelectorAll('[id$="-error"]').forEach(el => {
+            el.classList.add('hidden');
+          });
+          
+          // Validate form
+          let isValid = true;
+          const name = document.getElementById('name');
+          const email = document.getElementById('email');
+          const message = document.getElementById('message');
+          
+          if (!name.value.trim()) {
+            document.getElementById('name-error').classList.remove('hidden');
+            isValid = false;
+          }
+          
+          if (!email.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+            document.getElementById('email-error').classList.remove('hidden');
+            isValid = false;
+          }
+          
+          if (!message.value.trim()) {
+            document.getElementById('message-error').classList.remove('hidden');
+            isValid = false;
+          }
+          
+          if (isValid) {
+            // Show loading state
+            document.getElementById('submit-text').classList.add('hidden');
+            document.getElementById('spinner').classList.remove('hidden');
+            
+            // Simulate form submission
+            setTimeout(() => {
+              document.getElementById('spinner').classList.add('hidden');
+              document.getElementById('submit-text').classList.remove('hidden');
+              document.getElementById('form-success').classList.remove('hidden');
+              contactForm.reset();
+              
+              // Hide success message after 5 seconds
+              setTimeout(() => {
+                document.getElementById('form-success').classList.add('hidden');
+              }, 5000);
+            }, 1500);
+          }
+        });
+      }
     });
 
     function openModal(artwork) {
       document.getElementById('lightbox-image').src = artwork.image;
+      document.getElementById('lightbox-image').alt = artwork.title;
       document.getElementById('artwork-title').textContent = artwork.title;
       document.getElementById('artwork-year').textContent = artwork.year;
       document.getElementById('artwork-medium').textContent = artwork.medium;
-      document.getElementById('artwork-description').textContent = artwork.description;
+      document.getElementById('artwork-description').textContent = artwork.description || "No description available.";
+      
       document.getElementById('lightbox-modal').classList.remove('hidden');
       document.getElementById('mobile-close-btn').classList.remove('hidden');
       document.body.style.overflow = 'hidden';
+      
+      // Pause slideshow when lightbox is open
+      clearInterval(slideInterval);
     }
 
     function closeModal() {
       document.getElementById('lightbox-modal').classList.add('hidden');
       document.getElementById('mobile-close-btn').classList.add('hidden');
       document.body.style.overflow = 'auto';
+      
+      // Resume slideshow
+      startSlideShow();
     }
 
     // Close modal when clicking outside
@@ -416,4 +651,4 @@
     });
   </script>
 </body>
-  </html>
+</html>
